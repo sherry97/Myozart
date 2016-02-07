@@ -23,18 +23,23 @@ using System;
 public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
 {
     
+	int score;
+	Vector3 prevPos;
+
     void Start()
     {
         //Select the instance of AudioProcessor and pass a reference
         //to this object
         AudioProcessor processor = FindObjectOfType<AudioProcessor>();
-        processor.addAudioCallback(this);
+		processor.addAudioCallback(this);
+		prevPos = GetComponent<Transform>().position;
+		score = 100;
     }
 
     
     void Update()
     {
-        
+		prevPos = GetComponent<Transform>().position;
     }
 
     //this event will be called every time a beat is detected.
@@ -42,7 +47,11 @@ public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
     //to adjust the sensitivity
     public void onOnbeatDetected()
     {
-        Debug.Log("Beat!!!");
+		Vector3 n = prevPos - transform.position;
+		if (n.magnitude > 0.1){
+			score--;
+		}
+		Debug.Log (score.ToString());
     }
 
     //This event will be called every frame while music is playing
