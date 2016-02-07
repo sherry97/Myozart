@@ -15,6 +15,7 @@
  */
 
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 /*
@@ -22,9 +23,14 @@ using System;
  */
 public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
 {
-    
-	int score;
-	Vector3 prevPos;
+	public Text countText;
+	public Text endText;
+	public Text finalScore;
+	private int score;
+	private Vector3 prevPos;
+	public AudioClip otherClip;
+	AudioSource audio;
+	public ParticleSystem ps;
 
     void Start()
     {
@@ -34,11 +40,25 @@ public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
 		processor.addAudioCallback(this);
 		prevPos = GetComponent<Transform>().position;
 		score = 100;
+		countText.text = "SCORE: "+score.ToString ();
+		audio = GetComponent<AudioSource>();
+		endText.text = "";
+		finalScore.text = "";
     }
 
     
     void Update()
     {
+		if (!audio.isPlaying) {
+			endGame ();
+		}
+		Vector3 n = prevPos - transform.position;
+		ps.transform.position = transform.position;
+		Debug.Log (n.magnitude.ToString ());
+		if (n.magnitude == 0) {
+			ps.transform.position = transform.position;
+			ps.Simulate (1);
+		}
 		prevPos = GetComponent<Transform>().position;
     }
 
@@ -51,7 +71,7 @@ public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
 		if (n.magnitude > 0.1){
 			score--;
 		}
-		Debug.Log (score.ToString());
+		countText.text = "SCORE: "+score.ToString ();
     }
 
     //This event will be called every frame while music is playing
@@ -67,4 +87,10 @@ public class Example : MonoBehaviour, AudioProcessor.AudioCallbacks
             Debug.DrawLine(start, end);
         }
     }
+
+	public void endGame()
+	{
+		endText.text = "GAME OVER";
+		finalScore.text = "SCORE: " + score.ToString ();
+	}
 }
