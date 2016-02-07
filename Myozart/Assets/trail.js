@@ -1,13 +1,13 @@
 ﻿#pragma strict
 
 var rb: Rigidbody;
-//var ps: ParticleSystem;
+var ps: ParticleSystem;
 var prevPos : Vector3;
 var beenthere: boolean;
 
 function Start() {
 	rb = GetComponent.<Rigidbody>();
-//	ps = GetComponent.<ParticleSystem>();
+	ps = GetComponent.<ParticleSystem>();
 	prevPos = GetComponent.<Transform>().position;
 	beenthere = false;
 }
@@ -23,7 +23,7 @@ function Update () {
 //	if(!prevPos) {
 //		prevPos = transform.position;
 //	}
-	n = new Vector3(0, 0, 0) - n;
+//	n = new Vector3(0, 0, 0) - n;
 	var n = prevPos - transform.position;
 	if(n.magnitude > 0.1)
 	{
@@ -40,8 +40,4 @@ function Update () {
 
 	
 	prevPos = transform.position;
-}
-
-function velocity(position) {
-	
 }
